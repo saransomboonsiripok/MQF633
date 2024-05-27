@@ -1,16 +1,13 @@
 #pragma once
 #include "Trade.h"
+#include <cmath>
+
 
 class Swap : public Trade {
 public:
     //make necessary change
-    Swap(Date start, Date end, double _notional, double _price): Trade("SwapTrade", start) {
-        /*
-        
-        add constructor details
-        
-        */
-    }
+    Swap(Date start, Date end, double _notional, double _tradeRate, double _frequency)
+        : startDate(start), maturityDate(end), notional(_notional), tradeRate(_tradeRate), frequency(_frequency), Trade("SwapTrade", start){}
     
     /*
     implement this, using pv = annuity * (trade rate - market rate);
@@ -18,7 +15,10 @@ public:
     for a 2 year swap, with annual freq and notinal 100, annuity = 100 * Df(at year 1 end) + 100* Df(at year 2 end);
     Df = exp(-rT), r taken from curve;
     */
-    inline double Payoff(double marketPrice) const { return 0; }; 
+    inline double Payoff(double marketRate) const override {
+        double annuity = getAnnuity();
+        return annuity * (tradeRate - marketRate);
+    }
     double getAnnuity() const; //implement this in a cpp file
 
 private:

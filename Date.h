@@ -11,6 +11,15 @@ class Date
   int day;
   Date(int y, int m, int d) : year(y), month(m), day(d) {};
   Date(){};
+
+  // Comparison operators
+  bool operator<=(const Date& other) const;
+  bool operator>=(const Date& other) const;
+  bool operator<(const Date& other) const;
+  bool operator>(const Date& other) const;
+  bool operator==(const Date& other) const;
+  bool operator!=(const Date& other) const;
+  std::string toString() const;
 };
 
 // declaring functions
