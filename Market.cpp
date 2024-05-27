@@ -9,7 +9,7 @@ void RateCurve::display() const {
     for (size_t i=0; i<tenors.size(); i++) {
       cout << tenors[i].toString() << " : " << rates[i] << endl;
   }
-  cout << endl;
+  cout << endl; 
 }
 
 void RateCurve::addRate(Date tenor, double rate) {
@@ -41,6 +41,7 @@ double RateCurve::getRate(Date tenor) const {
   }
   return 0.0;
 }
+
 
 void VolCurve::display() const {
   cout << "Volatility Curve: " << name << endl;
@@ -113,4 +114,21 @@ std::istream& operator>>(std::istream& is, Market& mkt)
 {
   is >> mkt.asOf;
   return is;
+}
+
+// Black Scholes Pricer Addition (Added method implementations)
+double Market::getStockPrice(const std::string& stockName) const {
+    auto it = stockPrices.find(stockName);
+    if (it != stockPrices.end()) {
+        return it->second;
+    }
+    throw std::invalid_argument("Stock price not found for: " + stockName);
+}
+
+double Market::getInterestRate(const std::string& curveName, const Date& date) const {
+    return getCurve(curveName).getRate(date);
+}
+
+double Market::getVolatility(const std::string& curveName, const Date& date) const {
+    return getVolCurve(curveName).getVol(date);
 }

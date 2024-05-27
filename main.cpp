@@ -11,6 +11,7 @@
 #include "Bond.h"
 #include "Swap.h"
 #include "AmericanTrade.h"
+#include "BlackScholesPricer.h" // Black Scholes for task 4
 
 using namespace std;
 
@@ -169,6 +170,7 @@ int main()
   
   //task 3, creat a pricer and price the portfolio, output the pricing result of each deal.
   Pricer* treePricer = new CRRBinomialTreePricer(10);
+  Pricer* blackScholesPricer = new BlackScholesPricer(); // Define blackScholesPricer here (for task 4)
   for (auto trade: myPortfolio) {
     double pv = treePricer->Price(mkt, trade);
     cout << trade->getType() << endl;
@@ -180,6 +182,16 @@ int main()
   // a) compare CRR binomial tree result for an european option vs Black model
   // b) compare CRR binomial tree result for an american option vs european option
 
+cout << "Task 4a - Comparison between CRR Binomial Tree and Black-Scholes for European options" << endl;
+    for (auto trade: myPortfolio) {
+        const EuropeanOption* option = dynamic_cast<const EuropeanOption*>(trade);
+        if (option) {
+            double pvCRR = treePricer->Price(mkt, trade);
+            double pvBS = blackScholesPricer->Price(mkt, trade);
+            cout << "European Option " << option->getUnderlying() << " " << (option->isCall() ? "Call" : "Put")
+                 << " CRR Price: " << pvCRR << " Black-Scholes Price: " << pvBS << endl;
+        }
+    }
   //final
   cout << "Project build successfully!" << endl;
   return 0;
