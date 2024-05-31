@@ -62,14 +62,13 @@ public:
   JRRNBinomialTreePricer(int N) : BinomialTreePricer(N){}
  
 protected:
-  void ModelSetup(double S0, double sigma, double rate, double dt);
-  
-  double GetSpot(int ti, int si) const
-  {
-    return currentSpot * std::pow(u, ti-si) * std::pow(d, si);
-  }
-  double GetProbUp() const {return p;}
-  double GetProbDown() const {return 1-p;}
+    void ModelSetup(double S0, double sigma, double rate, double dt) override;
+    double GetSpot(int ti, int si) const override {
+        return currentSpot * std::pow(u, ti - si) * std::pow(d, si);
+    }
+    double GetProbUp() const override { return p; }
+    double GetProbDown() const override { return 1 - p; }
+
 
 private:
   double u; // up multiplicative

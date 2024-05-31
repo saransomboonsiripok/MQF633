@@ -24,7 +24,7 @@ public:
     return std::max(Payoff(S), continuation); 
   }
 
-private:
+//private:
   OptionType optType;
   double strike;
   Date expiryDate;  

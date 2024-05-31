@@ -11,6 +11,7 @@ public:
     inline string getType(){ return tradeType; };
     virtual double Payoff(double marketPrice) const = 0;
     virtual ~Trade(){};
+    virtual std::string getType() const { return tradeType; }
 
 protected:   
     string tradeType;

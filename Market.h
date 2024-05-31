@@ -51,11 +51,7 @@ public:
   inline VolCurve getVolCurve(const string& name) const { return vols.at(name); };
   double getDiscountFactor(const std::string& curveName, double time) const;
 
-  double getStockPrice(const std::string& stockName) const;  // Black Scholes Pricer Addition (Added method to get stock price)
-  double getInterestRate(const std::string& curveName, const Date& date) const;  // Black Scholes Pricer Addition (Added method to get interest rate)
-  double getVolatility(const std::string& curveName, const Date& date) const;  // Black Scholes Pricer Addition (Added method to get volatility)
-
-private:
+//private:
   
   unordered_map<string, VolCurve> vols;
   unordered_map<string, RateCurve> curves;

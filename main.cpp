@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <ctime>
 #include <algorithm>
+#include <iomanip>
 
 #include "Market.h"
 #include "Pricer.h"
@@ -11,7 +12,9 @@
 #include "Bond.h"
 #include "Swap.h"
 #include "AmericanTrade.h"
-#include "BlackScholesPricer.h" // Black Scholes for task 4
+#include "BlackScholes.h"
+#include "Payoff.h"
+#include "Types.h"
 
 using namespace std;
 
@@ -117,6 +120,7 @@ void readStockPriceData(const string& fileName, Market& market) {
     }
 }
 
+
 int main()
 {
   //task 1, create an market data object, and update the market data from from txt file 
@@ -129,9 +133,6 @@ int main()
   valueDate.day = now_->tm_mday;
 
   Market mkt = Market(valueDate);
-  /*
-  load data from file and update market object with data
-  */
   readCurveData("curve.txt", mkt);
   readVolData("vol.txt", mkt);
   readBondPriceData("bondPrice.txt", mkt);
@@ -151,10 +152,10 @@ int main()
   myPortfolio.push_back(new Bond(Date(2023, 1, 1), Date(2033, 1, 1), 12000000, 102.0, "SGD-GOV"));
 
   // Add swaps
-  myPortfolio.push_back(new Swap(Date(2024, 1, 1), Date(2029, 1, 1), 15000000, 0.05, 1));
-  myPortfolio.push_back(new Swap(Date(2025, 1, 1), Date(2030, 1, 1), 25000000, 0.045, 1));
-  myPortfolio.push_back(new Swap(Date(2026, 1, 1), Date(2031, 1, 1), 20000000, 0.04, 2));
-  myPortfolio.push_back(new Swap(Date(2027, 1, 1), Date(2032, 1, 1), 10000000, 0.035, 4));
+  myPortfolio.push_back(new Swap(Date(2024, 1, 1), Date(2029, 1, 1), 15000000, 0.070, 1));
+  myPortfolio.push_back(new Swap(Date(2024, 1, 1), Date(2030, 1, 1), 25000000, 0.065, 1));
+  myPortfolio.push_back(new Swap(Date(2024, 1, 1), Date(2031, 1, 1), 20000000, 0.060, 2));
+  myPortfolio.push_back(new Swap(Date(2024, 1, 1), Date(2032, 1, 1), 10000000, 0.055, 2));
 
   // Add European options
   myPortfolio.push_back(new EuropeanOption(Call, 100, Date(2024, 12, 31)));
@@ -169,29 +170,117 @@ int main()
   myPortfolio.push_back(new AmericanOption(Put, 90, Date(2027, 12, 31)));
   
   //task 3, creat a pricer and price the portfolio, output the pricing result of each deal.
+  cout << "\nTask 3 - Pricing Portfolio" << endl;
   Pricer* treePricer = new CRRBinomialTreePricer(10);
-  Pricer* blackScholesPricer = new BlackScholesPricer(); // Define blackScholesPricer here (for task 4)
   for (auto trade: myPortfolio) {
     double pv = treePricer->Price(mkt, trade);
-    cout << trade->getType() << endl;
+    cout << fixed << setprecision(2) << pv << endl;
+    }
     //log pv details out in a file
+    ofstream resultFile("Task 3.txt");
+    resultFile << "Task 3 - Portfolio Net Present Value" << "\n" << "\n";
+    double totalPV = 0.0;
+    int tradeID = 1;
 
-  }
+    for (auto trade: myPortfolio){
+        double pv = treePricer->Price(mkt, trade);
+        totalPV += pv;
+        if (trade->getType() == "BondTrade"){
+            Bond* bondptr = dynamic_cast<Bond*>(trade);
+            resultFile << "Trade ID: "<< tradeID << ". " << trade->getType() << ", "
+            << "Issuer" << bondptr->getUnderlying() << ", " 
+            << "Start Date of Bond: " <<bondptr->startDate << ", " 
+            << "Maturity Date of Bond: " << bondptr->maturityDate << ", "
+            << "Notional value: " << bondptr->notional << ", " 
+            << "Traded Price: " << bondptr->tradePrice * bondptr->notional << ", "
+            << "Current PV: " << pv << "\n" << "\n";
+            tradeID += 1;
+        }
+        else if (trade->getType() == "SwapTrade"){
+            Swap* swapptr = dynamic_cast<Swap*>(trade);
+            resultFile << "Trade ID: " << tradeID << ". " << trade->getType() << ", "
+            << "Start Date of Contract: " << swapptr->startDate << ", "
+            << "Maturity Date of Contract: " << swapptr->maturityDate << ", "
+            << "Notional: " << swapptr->notional << ", "
+            << "Traded Rate: " << swapptr->tradeRate << ", "
+            << "Payment Frequency per year: " << swapptr->frequency << ", "
+            << "Current PV: " << pv << "\n" << "\n";
+            tradeID += 1;
+        }
+        else if (trade->getType() == "TreeProduct"){
+            EuropeanOption* eur = dynamic_cast<EuropeanOption*>(trade);
+            if (eur){ // mean this is European option
+            resultFile << "Trade ID: " << tradeID << ". " << trade->getType() << "European Option" << ", "
+            << "Option type: " << eur->optType << ", "
+            << "Expiry Date: " << eur->expiryDate << ", "
+            << "Strike price: " << eur->strike << ", "
+            << "Present Value: " << pv << "\n" << "\n";
+            tradeID += 1;
+            }
+            else{
+            AmericanOption* amr = dynamic_cast<AmericanOption*>(trade);
+            resultFile << "Trade ID: " << tradeID << ". " << trade->getType() << "European Option" << ", "
+            << "Option type: " << amr->optType << ", "
+            << "Expiry Date: " << amr->expiryDate << ", "
+            << "Strike price: " << amr->strike << ", "
+            << "Present Value: " << pv << "\n" << "\n";
+            tradeID += 1;
+        }
+    }
+    }
+
+    resultFile << "Total NPV of the portfolio is: " << totalPV << endl;
 
   //task 4, analyzing pricing result
   // a) compare CRR binomial tree result for an european option vs Black model
   // b) compare CRR binomial tree result for an american option vs european option
+    
+    cout << "\nTask 4 - Comparison of option pricing" << endl;
+    OptionType optType = Call;
+    double strike = 100.0;
+    Date expiryDate(2025, 1, 1);
+    double spotPrice = 100.0;
+    double volatility = 0.20;
+    double riskFreeRate = 0.05;
+    // double T = 214.0;
+    double T = static_cast<double>(expiryDate - valueDate);
+    ofstream resultFile2("Task 4.txt");
+    resultFile2 << "Task 4 - Comparison of option pricing" << "\n" << "\n"
+    << "The properties of the option are: " << "\n" << "\n"
+    << "Option Type: " << optType << "\n"
+    << "Strike Price: " << strike << "\n"
+    << "Expiry Date: " << expiryDate.day << "/" << expiryDate.month << "/" << expiryDate.year << "\n"
+    << "Spot Price: " << spotPrice << "\n"
+    << "Volatility: " << volatility << "\n"
+    << "Risk free rate: " << riskFreeRate << "\n" << "\n"; 
 
-cout << "Task 4a - Comparison between CRR Binomial Tree and Black-Scholes for European options" << endl;
-    for (auto trade: myPortfolio) {
-        const EuropeanOption* option = dynamic_cast<const EuropeanOption*>(trade);
-        if (option) {
-            double pvCRR = treePricer->Price(mkt, trade);
-            double pvBS = blackScholesPricer->Price(mkt, trade);
-            cout << "European Option " << option->getUnderlying() << " " << (option->isCall() ? "Call" : "Put")
-                 << " CRR Price: " << pvCRR << " Black-Scholes Price: " << pvBS << endl;
-        }
+    if (T <= 0) {
+        cerr << "Invalid expiry date: T is non-positive." << endl;
+        return 1;
     }
+
+    EuropeanOption euroOption(optType, strike, expiryDate);
+
+    CRRBinomialTreePricer treePricers(100);
+    double priceTree = treePricers.PriceTree(mkt, euroOption);
+    double priceBlackScholes = BlackScholesPrice(spotPrice, strike, T, riskFreeRate, volatility, optType);
+
+    cout << "Price of the European option with CRR Binomial Tree: " << priceTree << endl;
+    cout << "Price of the European option with Black-Scholes: " << priceBlackScholes << endl;
+
+    resultFile2 << "A: CRR Binomial Tree and Black-Scholes" << "\n" << "\n"
+    << "Price of the European option with CRR Binomial Tree: " << priceTree << "\n"
+    << "Price of the European option with Black-Scholes: " << priceBlackScholes << "\n" << "\n";
+   
+    // Task 4b: Compare with an American option
+    AmericanOption americanOption(optType, strike, expiryDate);
+    double priceAmericanOption = treePricers.PriceTree(mkt, americanOption);
+    cout << "Price of the American option with CRR Binomial Tree: " << priceAmericanOption << endl;
+    resultFile2 << "B: CRR Binomial for European VS American Option" << "\n" << "\n"
+    << "Price of the European option with CRR Binomial Tree: " << priceTree << "\n"
+    << "Price of the American option with CRR Binomial Tree: " << priceAmericanOption;
+  
+
   //final
   cout << "Project build successfully!" << endl;
   return 0;

@@ -15,17 +15,10 @@ public:
     virtual const Date& GetExpiry() const { return expiryDate; }
     virtual double ValueAtNode(double S, double t, double continuation) const { return continuation; }
 
-// Black Scholes Pricer Addition
-std::string getUnderlying() const { return underlying; }
-    double getStrike() const { return strike; }
-    double getTimeToMaturity(const Date& asOf) const { return expiryDate - asOf; }
-    bool isCall() const { return optType == Call; }
-
-private:
+//private:
     OptionType optType;
     double strike;
     Date expiryDate;
-    std::string underlying; // Black Scholes Pricer Addition
 };
 
 class EuroCallSpread : public EuropeanOption {

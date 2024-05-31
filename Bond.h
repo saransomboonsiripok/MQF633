@@ -1,5 +1,6 @@
 #pragma once
 #include "Trade.h"
+#include "Market.h"
 #include <string>
 
 class Bond : public Trade {
@@ -13,15 +14,12 @@ public:
     }
 
     inline double Payoff(double marketPrice) const override{
-        return (marketPrice - tradePrice);
+        return ((marketPrice  / 100) * notional);
     } // implement this
 
     std::string getUnderlying() const { return underlying; }
-    Date getIssueDate() const { return startDate; }
-    Date getMaturityDate() const { return maturityDate; }
-    double getTradePrice() const { return tradePrice; }
 
-private:
+//private:
     double notional;
     double tradePrice;
     Date startDate;
