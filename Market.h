@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include "Date.h"
+#include "Date.h" // Include only 
 
 using namespace std;
 
@@ -46,12 +46,13 @@ public:
   void addVolCurve(const std::string& curveName, const VolCurve& curve);//implement this
   void addBondPrice(const std::string& bondName, double price);//implement this
   void addStockPrice(const std::string& stockName, double price);//implement this
-  
+
   inline RateCurve getCurve(const string& name) const { return curves.at(name); };
   inline VolCurve getVolCurve(const string& name) const { return vols.at(name); };
-  double getDiscountFactor(const std::string& curveName, double time) const;
+  inline auto getBondPrice() const {return bondPrices;};
+  inline auto getStockPrice() const {return stockPrices;};
 
-//private:
+private:
   
   unordered_map<string, VolCurve> vols;
   unordered_map<string, RateCurve> curves;
