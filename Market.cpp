@@ -1,26 +1,33 @@
 #include "Market.h"
-#include <algorithm>
-#include <cmath>
 
 using namespace std;
 
 void RateCurve::display() const {
     cout << "rate curve:" << name << endl;
     for (size_t i=0; i<tenors.size(); i++) {
-      cout << tenors[i].toString() << " : " << rates[i] << endl;
+      cout << tenors[i] << ":" << rates[i] << endl;
   }
   cout << endl;
 }
 
+void VolCurve::display() const {
+  cout << "Volatility Curve: " << name << endl;
+  for (size_t i = 0; i < tenors.size(); ++i){
+    cout << tenors[i] << " : " << vols[i] << endl;
+  }
+}
+
 void RateCurve::addRate(Date tenor, double rate) {
   //consider to check if tenor already exist
-  auto it = std::find(tenors.begin(), tenors.end(), tenor);
-  if (it == tenors.end()){
+  if (true){
     tenors.push_back(tenor);
     rates.push_back(rate);
-  }else{
-    cout << "Tenor already exists: " << tenor << endl;
   }  
+}
+
+void VolCurve::addVol(Date tenor, double vol) {
+    tenors.push_back(tenor);
+    vols.push_back(vol);
 }
 
 double RateCurve::getRate(Date tenor) const {
@@ -42,16 +49,45 @@ double RateCurve::getRate(Date tenor) const {
   return 0.0;
 }
 
-void VolCurve::display() const {
-  cout << "Volatility Curve: " << name << endl;
-  for (size_t i = 0; i < tenors.size(); ++i){
-    cout << tenors[i].toString() << " : " << vols[i] << endl;
+double VolCurve::getVol(Date tenor) const {
+  //use linear interpolation to get rate
+  if (tenors.empty()) return 0.0;
+  if (tenor <= tenors.front()) return vols.front();
+  if (tenor >= tenors.back()) return vols.back();
+
+  for (size_t i = 1; i < tenors.size(); ++i){
+    if (tenor < tenors[i]){
+      double t1 = tenors[i-1] - tenors[0];
+      double t2 = tenors[i] - tenors[0];
+      double r1 = vols[i-1];
+      double r2 = vols[i];
+      double t = tenor - tenors[0];
+      return r1 + (r2 - r1) * (t - t1) / (t2 - t1);
+    }
   }
+  return 0.0;
 }
 
-void VolCurve::addVol(Date tenor, double vol) {
-    tenors.push_back(tenor);
-    vols.push_back(vol);
+
+
+void Market::Print() const
+{
+  cout << "market asof: " << asOf << endl;
+  cout << "Rate curve: " << endl;
+  for (auto curve: curves) {
+    curve.second.display();
+  }
+  for (auto vol: vols) {
+    vol.second.display();
+  }
+  cout << "\n" << "Bond prices: " << endl;
+  for (auto bondprice: bondPrices){
+    cout << bondprice.first << ":" << bondprice.second << endl;
+  }
+  cout << "\n" << "Stock prices: " <<endl;
+  for (auto stockprice: stockPrices){
+    cout << stockprice.first << ":" << stockprice.second << endl;
+  }
 }
 
 void Market::addCurve(const std::string& curveName, const RateCurve& curve){
@@ -62,45 +98,12 @@ void Market::addVolCurve(const std::string& curveName, const VolCurve& curve) {
     vols[curveName] = curve;
 }
 
-void Market::addBondPrice(const std::string& bondName, double price) {
-    bondPrices[bondName] = price;
+void Market::addBondPrice(const std::string& bondName, double price){
+  bondPrices[bondName] = price;
 }
 
 void Market::addStockPrice(const std::string& stockName, double price) {
     stockPrices[stockName] = price;
-}
-
-double Market::getDiscountFactor(const std::string& curveName, double time) const {
-    double rate = getCurve(curveName).getRate(Date(0, static_cast<int>(time * 12), 0));
-    return exp(-rate * time);
-}
-
-void Market::Print() const
-{
-  cout << "Market Data as of: " << asOf << endl;
-  cout << "Rate Curves:" << endl;
-  for (const auto& curve : curves) {
-      cout << curve.first << ": ";
-      curve.second.display();
-  }
-  cout << "Volatility Curves:" << endl;
-  for (const auto& volCurve : vols) {
-      cout << volCurve.first << ": ";
-      volCurve.second.display();
-  }
-cout << " " << endl;
-
-  cout << "Bond Prices:" << endl;
-  for (const auto& bondPrice : bondPrices) {
-      cout << bondPrice.first << ": " << bondPrice.second << endl;
-  }
-cout << " " << endl;
-
-  cout << "Stock Prices:" << endl;
-  for (const auto& stockPrice : stockPrices) {
-      cout << stockPrice.first << ": " << stockPrice.second << endl;
-  }
-cout << " " << endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const Market& mkt)
