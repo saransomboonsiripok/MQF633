@@ -23,11 +23,16 @@ public:
   { 
     return std::max(Payoff(S), continuation); 
   }
+  inline double Payoffswap(double market_rate, const Market& mkt) const {return 0.0;};
+  virtual const string& getUnderlying() const { return underlying; }
+  double getStike() {return strike;};
+  string getUnderlying() {return underlying;};
+  OptionType getoptiontype() {return optType;};
 
-//private:
+private:
   OptionType optType;
   double strike;
-  Date expiryDate;  
+  Date expiryDate;
   std::string underlying;
 };
 
