@@ -1,0 +1,142 @@
+QF633 - Project 1 - Output File
+
+Task 3 - Present Value of Portfolio
+----------------------------------------------------------------------
+Trade number: 1 type of asset:  Bond
+Issuer: SGD-GOV
+Start Date of Bond: 1/1/2024
+Maturity Date of Bond: 1/1/2034
+Notional: 10000000
+Traded price: 103.5
+Present Value: 10250000
+
+Trade number: 2 type of asset:  Bond
+Issuer: USD-GOV
+Start Date of Bond: 1/1/2025
+Maturity Date of Bond: 1/1/2035
+Notional: 20000000
+Traded price: 105
+Present Value: 21080000
+
+Trade number: 3 type of asset:  Bond
+Issuer: SGD-MAS-BILL
+Start Date of Bond: 1/6/2024
+Maturity Date of Bond: 1/6/2034
+Notional: 15000000
+Traded price: 104
+Present Value: 14700000
+
+Trade number: 4 type of asset:  Bond
+Issuer: SGD-GOV
+Start Date of Bond: 1/1/2023
+Maturity Date of Bond: 1/1/2033
+Notional: 12000000
+Traded price: 102
+Present Value: 12300000
+
+Trade number: 5 type of asset:  Swap
+Start Date: 1/1/2029
+Maturity Date: 1/1/2029
+Notional: 15000000
+Traded Rate: 0.07
+Payment Frequency per year: 1
+Current PV: 1431811.8
+
+Trade number: 6 type of asset:  Swap
+Start Date: 1/1/2031
+Maturity Date: 1/1/2031
+Notional: 20000000
+Traded Rate: 0.06
+Payment Frequency per year: 2
+Current PV: 3639444.5
+
+Trade number: 7 type of asset:  Swap
+Start Date: 1/1/2030
+Maturity Date: 1/1/2030
+Notional: 25000000
+Traded Rate: 0.065
+Payment Frequency per year: 1
+Current PV: 2393008.2
+
+Trade number: 8 type of asset:  Swap
+Start Date: 1/1/2032
+Maturity Date: 1/1/2032
+Notional: 10000000
+Traded Rate: 0.055
+Payment Frequency per year: 2
+Current PV: 1597516.5
+
+Trade number: 9 type of asset:  European Option
+Option Type: Call
+Expiry Date: 31/12/2024
+Strike Price: 650
+Underlying: APPL
+Current PV: 45.883772
+
+Trade number: 10 type of asset:  European Option
+Option Type: Put
+Expiry Date: 31/12/2025
+Strike Price: 5000
+Underlying: SP500
+Current PV: 172.21063
+
+Trade number: 11 type of asset:  European Option
+Option Type: Call
+Expiry Date: 30/6/2026
+Strike Price: 3000
+Underlying: STI
+Current PV: 775.76387
+
+Trade number: 12 type of asset:  European Option
+Option Type: Put
+Expiry Date: 30/6/2027
+Strike Price: 680
+Underlying: APPL
+Current PV: 35.823013
+
+Trade number: 13 type of asset:  American Option
+Option Type: Call
+Expiry Date: 31/12/2024
+Strike Price: 650
+Underlying: APPL
+Current PV: 45.883772
+
+Trade number: 14 type of asset:  American Option
+Option Type: Put
+Expiry Date: 31/12/2025
+Strike Price: 5000
+Underlying: SP500
+Current PV: 215.87014
+
+Trade number: 15 type of asset:  American Option
+Option Type: Call
+Expiry Date: 30/6/2026
+Strike Price: 3000
+Underlying: STI
+Current PV: 775.76387
+
+Trade number: 16 type of asset:  American Option
+Option Type: Put
+Expiry Date: 30/6/2027
+Strike Price: 680
+Underlying: APPL
+Current PV: 50.897836
+
+Current PV of the portfolio: 67393899
+
+Task 4 - Analyzing result
+----------------------------------------------------------------------
+A: comparing price from Binomial tree with Black model
+Parameters of option: 
+Option Type: Put
+Expiry Date: 31/12/2025
+Strike Price: 5000
+Underlying: SP500
+
+Number of steps for Binomial tree: 700
+Current PV calculated by Binonial tree: 173.68082
+Current PV calculated by Black model: 173.52368
+B: comparing price from Binomial tree for an American and an European Option
+Current PV for an European Option: 173.68082
+Current PV for an American Option: 215.37156
+------------------------ End of output File ------------------------

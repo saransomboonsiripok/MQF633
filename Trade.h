@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include "Date.h"
+#include "Market.h"
 
 using namespace std;
 
@@ -10,8 +11,8 @@ public:
     Trade(const string& _type,Date _tradeDate): tradeType(_type), tradeDate(_tradeDate) {};
     inline string getType(){ return tradeType; };
     virtual double Payoff(double marketPrice) const = 0;
+    virtual double Payoffswap(double marketRate, const Market& mkt) const = 0;
     virtual ~Trade(){};
-    virtual std::string getType() const { return tradeType; }
 
 protected:   
     string tradeType;

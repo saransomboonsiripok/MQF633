@@ -9,7 +9,9 @@ class TreeProduct: public Trade
 public:
     TreeProduct(): Trade() { tradeType = "TreeProduct";};
     virtual const Date& GetExpiry() const = 0;
+    virtual const string& getUnderlying() const = 0;
     virtual double ValueAtNode(double stockPrice, double t, double continuationValue) const = 0;
 };
 
 #endif
+
