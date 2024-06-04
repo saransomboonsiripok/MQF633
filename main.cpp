@@ -158,16 +158,16 @@ int main()
   myPortfolio.push_back(new Swap(Date(2024, 1, 1), Date(2032, 1, 1), 10000000, 0.055, 2));
 
   // Add European options
-  myPortfolio.push_back(new EuropeanOption(Call, 100, Date(2024, 12, 31)));
-  myPortfolio.push_back(new EuropeanOption(Put, 100, Date(2025, 12, 31)));
-  myPortfolio.push_back(new EuropeanOption(Call, 105, Date(2026, 6, 30)));
-  myPortfolio.push_back(new EuropeanOption(Put, 95, Date(2027, 6, 30)));
+  myPortfolio.push_back(new EuropeanOption(Call, 100, Date(2024, 12, 31), "AAPL"));
+  myPortfolio.push_back(new EuropeanOption(Put, 100, Date(2025, 12, 31), "SP500"));
+  myPortfolio.push_back(new EuropeanOption(Call, 105, Date(2026, 6, 30), "STI"));
+  myPortfolio.push_back(new EuropeanOption(Put, 95, Date(2027, 6, 30), "AAPL"));
 
   // Add American options
-  myPortfolio.push_back(new AmericanOption(Call, 100, Date(2024, 12, 31)));
-  myPortfolio.push_back(new AmericanOption(Put, 100, Date(2025, 12, 31)));
-  myPortfolio.push_back(new AmericanOption(Call, 110, Date(2026, 12, 31)));
-  myPortfolio.push_back(new AmericanOption(Put, 90, Date(2027, 12, 31)));
+  myPortfolio.push_back(new AmericanOption(Call, 100, Date(2024, 12, 31), "AAPL"));
+  myPortfolio.push_back(new AmericanOption(Put, 100, Date(2025, 12, 31), "SP500"));
+  myPortfolio.push_back(new AmericanOption(Call, 110, Date(2026, 12, 31), "STI"));
+  myPortfolio.push_back(new AmericanOption(Put, 90, Date(2027, 12, 31), "AAPL"));
   
   //task 3, creat a pricer and price the portfolio, output the pricing result of each deal.
   cout << "\nTask 3 - Pricing Portfolio" << endl;
@@ -242,6 +242,7 @@ int main()
     double spotPrice = 100.0;
     double volatility = 0.20;
     double riskFreeRate = 0.05;
+    string ticker = "AAPL";
     // double T = 214.0;
     double T = static_cast<double>(expiryDate - valueDate);
     ofstream resultFile2("Task 4.txt");
@@ -259,7 +260,7 @@ int main()
         return 1;
     }
 
-    EuropeanOption euroOption(optType, strike, expiryDate);
+    EuropeanOption euroOption(optType, strike, expiryDate, ticker);
 
     CRRBinomialTreePricer treePricers(100);
     double priceTree = treePricers.PriceTree(mkt, euroOption);
@@ -273,7 +274,7 @@ int main()
     << "Price of the European option with Black-Scholes: " << priceBlackScholes << "\n" << "\n";
    
     // Task 4b: Compare with an American option
-    AmericanOption americanOption(optType, strike, expiryDate);
+    AmericanOption americanOption(optType, strike, expiryDate, ticker);
     double priceAmericanOption = treePricers.PriceTree(mkt, americanOption);
     cout << "Price of the American option with CRR Binomial Tree: " << priceAmericanOption << endl;
     resultFile2 << "B: CRR Binomial for European VS American Option" << "\n" << "\n"

@@ -9,8 +9,8 @@
 
 class AmericanOption : public TreeProduct {
 public:
-  AmericanOption(OptionType _optType, double _strike, const Date& _expiry): 
-  optType(_optType), strike(_strike), expiryDate(_expiry) {}
+  AmericanOption(OptionType _optType, double _strike, const Date& _expiry, const std::string& _underlying): 
+  optType(_optType), strike(_strike), expiryDate(_expiry), underlying(_underlying) {}
   virtual double Payoff(double S) const 
   { 
     return PAYOFF::VanillaOption(optType, strike, S); 
@@ -28,6 +28,7 @@ public:
   OptionType optType;
   double strike;
   Date expiryDate;  
+  std::string underlying;
 };
 
 class AmerCallSpread : public TreeProduct {

@@ -11,10 +11,10 @@ Risk free rate: 0.05
 
 A: CRR Binomial Tree and Black-Scholes
 
-Price of the European option with CRR Binomial Tree: 7.54236
-Price of the European option with Black-Scholes: 7.5554
+Price of the European option with CRR Binomial Tree: 7.53359
+Price of the European option with Black-Scholes: 7.54663
 
 B: CRR Binomial for European VS American Option
 
-Price of the European option with CRR Binomial Tree: 7.54236
-Price of the American option with CRR Binomial Tree: 7.54236
+Price of the European option with CRR Binomial Tree: 7.53359
+Price of the American option with CRR Binomial Tree: 7.53359

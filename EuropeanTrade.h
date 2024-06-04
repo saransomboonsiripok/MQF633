@@ -10,7 +10,7 @@
 class EuropeanOption : public TreeProduct {
 public:
     EuropeanOption(){};
-    EuropeanOption(OptionType _optType, double _strike, const Date& _expiry) :optType(_optType), strike(_strike), expiryDate(_expiry) {};
+    EuropeanOption(OptionType _optType, double _strike, const Date& _expiry, const std::string& _underlying) :optType(_optType), strike(_strike), expiryDate(_expiry), underlying(_underlying) {};
     virtual double Payoff(double S) const { return PAYOFF::VanillaOption(optType, strike, S); }
     virtual const Date& GetExpiry() const { return expiryDate; }
     virtual double ValueAtNode(double S, double t, double continuation) const { return continuation; }
@@ -18,6 +18,7 @@ public:
 //private:
     OptionType optType;
     double strike;
+    std::string underlying;
     Date expiryDate;
 };
 

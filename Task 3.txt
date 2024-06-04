@@ -18,42 +18,42 @@ Trade ID: 4. BondTrade, IssuerSGD-GOV, Start Date of Bond: 2023 1 1
 
 Trade ID: 5. SwapTrade, Start Date of Contract: 2024 1 1
 , Maturity Date of Contract: 2029 1 1
-, Notional: 1.5e+07, Traded Rate: 0.07, Payment Frequency per year: 1, Current PV: 1.29699e+07
+, Notional: 1.5e+07, Traded Rate: 0.07, Payment Frequency per year: 1, Current PV: 2.0465e+06
 
 Trade ID: 6. SwapTrade, Start Date of Contract: 2024 1 1
 , Maturity Date of Contract: 2030 1 1
-, Notional: 2.5e+07, Traded Rate: 0.065, Payment Frequency per year: 1, Current PV: 2.04971e+07
+, Notional: 2.5e+07, Traded Rate: 0.065, Payment Frequency per year: 1, Current PV: 3.36205e+06
 
 Trade ID: 7. SwapTrade, Start Date of Contract: 2024 1 1
 , Maturity Date of Contract: 2031 1 1
-, Notional: 2e+07, Traded Rate: 0.06, Payment Frequency per year: 2, Current PV: 1.59433e+07
+, Notional: 2e+07, Traded Rate: 0.06, Payment Frequency per year: 2, Current PV: 5.02501e+06
 
 Trade ID: 8. SwapTrade, Start Date of Contract: 2024 1 1
 , Maturity Date of Contract: 2032 1 1
-, Notional: 1e+07, Traded Rate: 0.055, Payment Frequency per year: 2, Current PV: 7.13104e+06
+, Notional: 1e+07, Traded Rate: 0.055, Payment Frequency per year: 2, Current PV: 2.14686e+06
 
 Trade ID: 9. TreeProductEuropean Option, Option type: 0, Expiry Date: 2024 12 31
-, Strike price: 100, Present Value: 7.4177
+, Strike price: 100, Present Value: 7.409
 
 Trade ID: 10. TreeProductEuropean Option, Option type: 1, Expiry Date: 2025 12 31
-, Strike price: 100, Present Value: 6.13912
+, Strike price: 100, Present Value: 6.13807
 
 Trade ID: 11. TreeProductEuropean Option, Option type: 0, Expiry Date: 2026 6 30
-, Strike price: 105, Present Value: 14.3078
+, Strike price: 105, Present Value: 14.302
 
 Trade ID: 12. TreeProductEuropean Option, Option type: 1, Expiry Date: 2027 6 30
-, Strike price: 95, Present Value: 5.67823
+, Strike price: 95, Present Value: 5.67784
 
 Trade ID: 13. TreeProductEuropean Option, Option type: 0, Expiry Date: 2024 12 31
-, Strike price: 100, Present Value: 7.4177
+, Strike price: 100, Present Value: 7.409
 
 Trade ID: 14. TreeProductEuropean Option, Option type: 1, Expiry Date: 2025 12 31
-, Strike price: 100, Present Value: 7.1404
+, Strike price: 100, Present Value: 7.13864
 
 Trade ID: 15. TreeProductEuropean Option, Option type: 0, Expiry Date: 2026 12 31
-, Strike price: 110, Present Value: 14.7256
+, Strike price: 110, Present Value: 14.7201
 
 Trade ID: 16. TreeProductEuropean Option, Option type: 1, Expiry Date: 2027 12 31
-, Strike price: 90, Present Value: 5.61094
+, Strike price: 90, Present Value: 5.61018
 
-Total NPV of the portfolio is: 1.14871e+08
+Total NPV of the portfolio is: 7.09105e+07

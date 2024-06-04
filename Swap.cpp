@@ -61,6 +61,7 @@ double Swap::PayoffSwap(Market mkt) const {
     }
     }
 
+
     // 3 - eliminate the payment date that is before current date
     payment_dates.erase(
         std::remove_if(payment_dates.begin(), payment_dates.end(), [current_date](const Date& date){
@@ -80,6 +81,12 @@ double Swap::PayoffSwap(Market mkt) const {
         period_date.year = 0;
         tenors.push_back(period_date);
     }
+
+    // check tenor - delete later
+    for (const auto& date: tenors){
+        cout << date.day << " " << date.month << " " << date.year << endl;
+    }
+    cout << "Next swap" << endl;
     
     // 5 - get discount factor
     vector <double> dfs;
@@ -96,7 +103,7 @@ double Swap::PayoffSwap(Market mkt) const {
         sum += df;
     }
     double annuity = sum * notional;
-    double market_rate = mkt.curves["USD-SOFR"].getRate(Date(0,0,0));
+    double market_rate = mkt.curves["USD-SOFR"].getRate(maturityDate);
     double swap_price = annuity * (tradeRate - market_rate);
-    return swap_price + (notional * dfs.back());
+    return swap_price;
 }
