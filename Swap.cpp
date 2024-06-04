@@ -1,14 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iomanip>
 #include <cmath>
 #include "Swap.h"
 #include "Market.h"
 #include "Date.h"
 #include <ctime>
 
-// Function to calculate the annuity
-double Swap::PayoffSwap(Market mkt) const {
+double Swap::getAnnuity(const Market& mkt) const {
     // 1 - get current date
     std::time_t t = std::time(0);
     auto now_ = localtime(&t);
@@ -17,7 +17,7 @@ double Swap::PayoffSwap(Market mkt) const {
     current_date.month = now_->tm_mon + 1;
     current_date.day = now_->tm_mday;
 
-    // 2 - find payment date
+    //2 - find payment date
     double interval_year = 1 / frequency;
     double num_payment = (maturityDate - startDate) * frequency;
     vector<Date> payment_dates;
@@ -61,49 +61,53 @@ double Swap::PayoffSwap(Market mkt) const {
     }
     }
 
-
-    // 3 - eliminate the payment date that is before current date
+    //3 - eliminate the payment date that is before current date
     payment_dates.erase(
         std::remove_if(payment_dates.begin(), payment_dates.end(), [current_date](const Date& date){
             return date < current_date;
         }),
         payment_dates.end()
     );
-    
-    // 4 - calculate the number of months from today 
+
+    //4 - calculate the number of month from today
     vector <Date> tenors;
     for (const auto& date: payment_dates){
-        double period;
-        period = (date - current_date) * 12;
+        int period;
+        int year_dif = date.year - current_date.year;
+        int month_dif = date.month - current_date.month;
+        int day_dif = date.day - current_date.day;
+        period = ((year_dif) * 360) + (month_dif * 30) + (day_dif);
         Date period_date;
-        period_date.month = period;
-        period_date.day = 0;
+        period_date.day = period;
+        period_date.month = 0;
         period_date.year = 0;
         tenors.push_back(period_date);
     }
 
-    // check tenor - delete later
-    for (const auto& date: tenors){
-        cout << date.day << " " << date.month << " " << date.year << endl;
-    }
-    cout << "Next swap" << endl;
-    
-    // 5 - get discount factor
+    //5 - get discount factor from the number of month
     vector <double> dfs;
     for (const auto& tenor: tenors){
-        double int_rate = mkt.curves["USD-SOFR"].getRate(tenor);
-        double month = tenor.month;
-        double df = exp(-int_rate * (month /12));
+        double int_rate = mkt.getCurve("USD-SOFR").getRate(Date(tenor.day, tenor.month, tenor.year));
+        double day = tenor.day;
+        double df = exp(-int_rate * (day / 365));
         dfs.push_back(df);
     }
 
-    // 6 - calculate pv
+    //6 - calculate annuity = notional * (sum of discount factor)
     double sum = 0;
-    for (const auto& df: dfs){
-        sum += df;
-    }
+    for (const auto& df: dfs){sum += df;}
     double annuity = sum * notional;
-    double market_rate = mkt.curves["USD-SOFR"].getRate(maturityDate);
-    double swap_price = annuity * (tradeRate - market_rate);
-    return swap_price;
+    // unmute to check the calculation 
+    // for (auto& date: payment_dates){
+    //     cout << date.day << " " << date.month << " " << date.year << endl;
+    // }
+    // for (auto& tenor: tenors){
+    //     cout << tenor.day << " " << tenor.month << " " << tenor.year << endl;
+    // }
+    // for (auto& df: dfs){
+    //     cout << std::setprecision(6) << df << endl;
+    // }
+    // cout << sum << endl;
+    // cout << annuity << endl;
+     return annuity;
 }
